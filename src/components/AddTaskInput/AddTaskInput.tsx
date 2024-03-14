@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { addTask } from "../../store/toDoListSlice";
 import './AddTaskInput.css';
 
-interface Props {
-  onAddTaskHandler: (text: string) => void ;
-}
-const AddTaskInput : React.FC<Props> = ({ onAddTaskHandler }) => {
-
+const AddTaskInput = () => {
+  const dispatch = useDispatch();
   const [newTask, setNewTask] = useState<string>('');
 
   const onInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +13,7 @@ const AddTaskInput : React.FC<Props> = ({ onAddTaskHandler }) => {
 
   const onAddTask = () => {
     if (newTask.length >= 3) {
-      onAddTaskHandler(newTask);
+      dispatch(addTask(newTask));
       setNewTask('');
     }
   };
