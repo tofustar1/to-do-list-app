@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { nanoid } from "nanoid";
 import { ITask } from "../../types";
+import AddTaskInput from "../../components/AddTaskInput/AddTaskInput";
 import Task from "../../components/Task/Task";
 
 const ToDoList = () => {
@@ -27,9 +28,22 @@ const ToDoList = () => {
     setTasks(prevState => prevState.filter(task => task.id !== id));
   };
 
+  const onAddTaskHandler = (text: string) => {
+      const task : ITask = {
+        id: nanoid(),
+        text,
+        isDone: false,
+      };
+
+      setTasks(prevState => [...prevState, task]);
+    };
+
   return (
       <div className="container">
         <h1>ToDoList App</h1>
+        <AddTaskInput
+            onAddTaskHandler={onAddTaskHandler}
+        />
         {tasks.map(task => (
           <Task
               task={task}
