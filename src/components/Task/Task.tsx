@@ -1,4 +1,5 @@
 import React from 'react';
+import { Reorder } from "framer-motion";
 import { ITask } from "../../types";
 import './Task.css';
 
@@ -9,7 +10,11 @@ interface Props {
 }
 const Task : React.FC<Props> = ({task, onStatusChange, onRemove}) => {
   return (
-      <div className="task" key={task.id}>
+      <Reorder.Item
+          value={task}
+          className="task"
+          key={task.id}
+      >
         <span>{task.text}</span>
         <div className="controls">
           <input
@@ -24,7 +29,7 @@ const Task : React.FC<Props> = ({task, onStatusChange, onRemove}) => {
             X
           </button>
         </div>
-      </div>
+      </Reorder.Item>
   );
 };
 
