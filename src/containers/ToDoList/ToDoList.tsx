@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/hook";
-import { removeTask, selectFilter, selectTasks, toggleTaskStatus } from "../../store/toDoListSlice";
+import { addTasksFromStorage, removeTask, selectFilter, selectTasks, toggleTaskStatus } from "../../store/toDoListSlice";
+import { ITask } from "../../types";
 import AddTaskInput from "../../components/AddTaskInput/AddTaskInput";
 import Task from "../../components/Task/Task";
 import FilterBlock from "../../components/FilterBlock/FilterBlock";
@@ -11,6 +12,12 @@ const ToDoList = () => {
   const dispatch = useDispatch();
   const tasks = useAppSelector(selectTasks);
   const filter = useAppSelector(selectFilter);
+
+  useEffect(() => {
+    const storedTasksString = localStorage.getItem('tasks');
+    const storedTasks: ITask[] = storedTasksString ? JSON.parse(storedTasksString) : [];
+    dispatch(addTasksFromStorage(storedTasks));
+  }, [dispatch]);
 
   const onStatusChangeHandler = (id: string) => {
     dispatch(toggleTaskStatus(id));

@@ -28,9 +28,11 @@ const toDoListSlice = createSlice({
         isDone: false,
       };
       state.tasks.push(newTask);
+      localStorage.setItem('tasks', JSON.stringify(state.tasks));
     },
     removeTask: (state, action: PayloadAction<string>) => {
       state.tasks = state.tasks.filter(task => task.id !== action.payload);
+      localStorage.setItem('tasks', JSON.stringify(state.tasks));
     },
     toggleTaskStatus: (state, action: PayloadAction<string>) => {
       const taskId = action.payload;
@@ -43,14 +45,18 @@ const toDoListSlice = createSlice({
         }
         return task;
       });
+      localStorage.setItem('tasks', JSON.stringify(state.tasks));
     },
     setFilter(state, action: PayloadAction<TFilterValuesType>) {
       state.filter = action.payload;
-    }
+    },
+    addTasksFromStorage: (state, action: PayloadAction<ITask[]>) => {
+      state.tasks = action.payload;
+    },
   },
 });
 
 export const selectTasks = (state: RootState) => state.toDoList.tasks;
 export const selectFilter = (state: RootState) => state.toDoList.filter;
-export const { addTask, removeTask, toggleTaskStatus, setFilter } = toDoListSlice.actions;
+export const { addTask, removeTask, toggleTaskStatus, setFilter, addTasksFromStorage } = toDoListSlice.actions;
 export const toDoListReducer = toDoListSlice.reducer;
