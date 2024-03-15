@@ -3,7 +3,9 @@ import ToDoList from "./containers/ToDoList/ToDoList";
 
 const App = () => (
     <>
-      <ToDoList/>
+      <div className="container">
+        <ToDoList/>
+      </div>
     </>
 );
 

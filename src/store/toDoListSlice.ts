@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 import { RootState } from "../app/store";
-import { ITask } from "../types";
+import { ITask, TFilterValuesType } from "../types";
 
 interface ToDoListSlice {
-  tasks: ITask[],
+  tasks: ITask[];
+  filter : TFilterValuesType;
 }
 
 const initialState: ToDoListSlice = {
@@ -13,6 +14,7 @@ const initialState: ToDoListSlice = {
     {id: nanoid(), text: 'By milk', isDone: false},
     {id: nanoid(), text: 'Play Sony Playstation', isDone: false},
   ],
+  filter: 'All',
 };
 
 const toDoListSlice = createSlice({
@@ -42,9 +44,13 @@ const toDoListSlice = createSlice({
         return task;
       });
     },
+    setFilter(state, action: PayloadAction<TFilterValuesType>) {
+      state.filter = action.payload;
+    }
   },
 });
 
 export const selectTasks = (state: RootState) => state.toDoList.tasks;
-export const {addTask, removeTask, toggleTaskStatus} = toDoListSlice.actions;
+export const selectFilter = (state: RootState) => state.toDoList.filter;
+export const { addTask, removeTask, toggleTaskStatus, setFilter } = toDoListSlice.actions;
 export const toDoListReducer = toDoListSlice.reducer;

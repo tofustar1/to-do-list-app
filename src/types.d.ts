@@ -3,3 +3,5 @@ export interface ITask {
   text: string;
   isDone: boolean;
 }
+
+export type TFilterValuesType = "All" | "Done" | "Active" ;
