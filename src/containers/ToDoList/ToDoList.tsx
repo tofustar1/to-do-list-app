@@ -1,8 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { Reorder } from 'framer-motion';
 import { useAppSelector } from "../../app/hook";
-import { addTasksFromStorage, removeTask, selectFilter, selectTasks, toggleTaskStatus } from "../../store/toDoListSlice";
+import {
+  addTasksFromStorage,
+  removeTask,
+  selectFilter,
+  selectTasks,
+  toggleTaskStatus,
+  updateTasksOrder
+} from "../../store/toDoListSlice";
 import { ITask } from "../../types";
 import AddTaskInput from "../../components/AddTaskInput/AddTaskInput";
 import Task from "../../components/Task/Task";
@@ -21,12 +28,6 @@ const ToDoList = () => {
     tasksForToDoList = tasks.filter(task => !task.isDone);
   }
 
-  const [dragAndDropTasks, setDragAndDropTasks] = useState(tasksForToDoList);
-
-  useEffect(() => {
-    setDragAndDropTasks(tasksForToDoList);
-  }, [tasksForToDoList]);
-
   useEffect(() => {
     const storedTasksString = localStorage.getItem('tasks');
     const storedTasks: ITask[] = storedTasksString ? JSON.parse(storedTasksString) : [];
@@ -43,16 +44,20 @@ const ToDoList = () => {
     dispatch(removeTask(id));
   };
 
+  const onReorderHandler = (reorderedTasks : ITask[]) => {
+    dispatch(updateTasksOrder(reorderedTasks));
+  };
+
   return (
       <div className="todolist">
         <h1>ToDoList App</h1>
         <AddTaskInput/>
         <Reorder.Group
-            onReorder={setDragAndDropTasks}
-            values={dragAndDropTasks}
+            onReorder={onReorderHandler}
+            values={tasksForToDoList}
             axis="y"
         >
-        {dragAndDropTasks.map(task => (
+        {tasksForToDoList.map(task => (
             <Task
                 task={task}
                 key={task.id}

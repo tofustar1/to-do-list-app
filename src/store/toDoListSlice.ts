@@ -10,9 +10,9 @@ interface ToDoListSlice {
 
 const initialState: ToDoListSlice = {
   tasks: [
-    {id: nanoid(), text: 'Do homework', isDone: true},
-    {id: nanoid(), text: 'By milk', isDone: false},
-    {id: nanoid(), text: 'Play Sony Playstation', isDone: false},
+    {id: nanoid(), text: 'Do homework', isDone: true, order: 0},
+    {id: nanoid(), text: 'By milk', isDone: false, order: 1},
+    {id: nanoid(), text: 'Play Sony Playstation', isDone: false, order: 2},
   ],
   filter: 'All',
 };
@@ -26,6 +26,7 @@ const toDoListSlice = createSlice({
         id: nanoid(),
         text: action.payload,
         isDone: false,
+        order: state.tasks.length
       };
       state.tasks.push(newTask);
       localStorage.setItem('tasks', JSON.stringify(state.tasks));
@@ -53,10 +54,14 @@ const toDoListSlice = createSlice({
     addTasksFromStorage: (state, action: PayloadAction<ITask[]>) => {
       state.tasks = action.payload;
     },
+    updateTasksOrder: (state, action: PayloadAction<ITask[]>) => {
+      state.tasks = action.payload;
+      localStorage.setItem('tasks', JSON.stringify(state.tasks));
+    },
   },
 });
 
 export const selectTasks = (state: RootState) => state.toDoList.tasks;
 export const selectFilter = (state: RootState) => state.toDoList.filter;
-export const { addTask, removeTask, toggleTaskStatus, setFilter, addTasksFromStorage } = toDoListSlice.actions;
+export const { addTask, removeTask, toggleTaskStatus, setFilter, addTasksFromStorage, updateTasksOrder } = toDoListSlice.actions;
 export const toDoListReducer = toDoListSlice.reducer;
